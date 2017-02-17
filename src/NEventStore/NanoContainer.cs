@@ -27,10 +27,10 @@ namespace NEventStore
                 throw new ArgumentNullException("instance", Messages.InstanceCannotBeNull);
             }
 
-            if (!typeof (TService).IsValueType && !typeof (TService).IsInterface)
-            {
-                throw new ArgumentException(Messages.TypeMustBeInterface, "instance");
-            }
+            //if (!typeof (TService).IsValueType && !typeof (TService).IsInterface)
+            //{
+            //    throw new ArgumentException(Messages.TypeMustBeInterface, "instance");
+            //}
 
             Logger.Debug(Messages.RegisteringServiceInstance, typeof (TService));
             var registration = new ContainerRegistration(instance);

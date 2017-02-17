@@ -6,25 +6,25 @@
 
     internal static class TaskHelpers
     {
-        internal static Task Delay(double milliseconds, CancellationToken cancellationToken)
-        {
-            var tcs = new TaskCompletionSource<bool>();
-            var timer = new System.Timers.Timer();
-            timer.Elapsed += (obj, args) => tcs.TrySetResult(true);
-            timer.Interval = milliseconds;
-            timer.AutoReset = false;
-            timer.Start();
-            CancellationTokenRegistration cancellationTokenRegistration = cancellationToken.Register(() =>
-            {
-                timer.Stop();
-                tcs.TrySetCanceled();
-            });
-            return tcs.Task.ContinueWith(_ =>
-            {
-                cancellationTokenRegistration.Dispose();
-                timer.Dispose();
-            }, TaskContinuationOptions.ExecuteSynchronously);
-        }
+        //internal static Task Delay(double milliseconds, CancellationToken cancellationToken)
+        //{
+        //    var tcs = new TaskCompletionSource<bool>();
+        //    var timer = new System.Timers.Timer();
+        //    timer.Elapsed += (obj, args) => tcs.TrySetResult(true);
+        //    timer.Interval = milliseconds;
+        //    timer.AutoReset = false;
+        //    timer.Start();
+        //    CancellationTokenRegistration cancellationTokenRegistration = cancellationToken.Register(() =>
+        //    {
+        //        timer.Stop();
+        //        tcs.TrySetCanceled();
+        //    });
+        //    return tcs.Task.ContinueWith(_ =>
+        //    {
+        //        cancellationTokenRegistration.Dispose();
+        //        timer.Dispose();
+        //    }, TaskContinuationOptions.ExecuteSynchronously);
+        //}
 
         public static void WhenCompleted<T>(this Task<T> task, Action<Task<T>> onComplete, Action<Task<T>> onFaulted, bool execSync = false)
         {

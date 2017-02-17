@@ -7,7 +7,6 @@
     /// <summary>
     ///     Represents a single element in a stream of events.
     /// </summary>
-    [Serializable]
     [DataContract]
     public class EventMessage
     {

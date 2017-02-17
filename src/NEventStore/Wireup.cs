@@ -2,7 +2,6 @@ namespace NEventStore
 {
     using System.Collections.Generic;
     using System.Linq;
-    using System.Transactions;
     using NEventStore.Conversion;
     using NEventStore.Dispatcher;
     using NEventStore.Persistence;
@@ -33,7 +32,7 @@ namespace NEventStore
         {
             var container = new NanoContainer();
 
-            container.Register(TransactionScopeOption.Suppress);
+            //container.Register(TransactionScopeOption.Suppress);
             container.Register<IPersistStreams>(new InMemoryPersistenceEngine());
             container.Register<IScheduleDispatches>(new NullDispatcher());
             container.Register<ISerialize>(new JsonSerializer());
@@ -72,14 +71,14 @@ namespace NEventStore
 
         private static IStoreEvents BuildEventStore(NanoContainer context)
         {
-            var scopeOption = context.Resolve<TransactionScopeOption>();
-            OptimisticPipelineHook concurrency = scopeOption == TransactionScopeOption.Suppress ? new OptimisticPipelineHook() : null;
+            //var scopeOption = context.Resolve<TransactionScopeOption>();
+            //OptimisticPipelineHook concurrency = scopeOption == TransactionScopeOption.Suppress ? new OptimisticPipelineHook() : null;
             var dispatchScheduler = context.Resolve<IScheduleDispatches>();
             var dispatchSchedulerHook = new DispatchSchedulerPipelineHook(dispatchScheduler);
             var upconverter = context.Resolve<EventUpconverterPipelineHook>();
 
             ICollection<IPipelineHook> hooks = context.Resolve<ICollection<IPipelineHook>>() ?? new IPipelineHook[0];
-            hooks = new IPipelineHook[] { concurrency, dispatchSchedulerHook, upconverter }
+            hooks = new IPipelineHook[] { /*concurrency,*/ dispatchSchedulerHook, upconverter }
                 .Concat(hooks)
                 .Where(x => x != null)
                 .ToArray();

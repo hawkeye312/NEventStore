@@ -89,7 +89,7 @@
                     return _runningTaskCompletionSource.Task;
                 }
                 _runningTaskCompletionSource = new TaskCompletionSource<Unit>();
-                PollLoop();
+                //PollLoop(); TODO implement Timer
                 return _runningTaskCompletionSource.Task;
             }
 
@@ -98,20 +98,20 @@
                 DoPoll();
             }
 
-            private void PollLoop()
-            {
-                if (_stopRequested.IsCancellationRequested)
-                {
-                    Dispose();
-                    return;
-                }
-                TaskHelpers.Delay(_interval, _stopRequested.Token)
-                    .WhenCompleted(_ =>
-                    {
-                        DoPoll();
-                        PollLoop();
-                    },_ => Dispose());
-            }
+            //private void PollLoop()
+            //{
+            //    if (_stopRequested.IsCancellationRequested)
+            //    {
+            //        Dispose();
+            //        return;
+            //    }
+            //    TaskHelpers.Delay(_interval, _stopRequested.Token)
+            //        .WhenCompleted(_ =>
+            //        {
+            //            DoPoll();
+            //            PollLoop();
+            //        },_ => Dispose());
+            //}
 
             private void DoPoll()
             {

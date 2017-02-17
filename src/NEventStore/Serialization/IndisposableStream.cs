@@ -42,11 +42,6 @@ namespace NEventStore.Serialization
             // no-op
         }
 
-        public override void Close()
-        {
-            // no-op
-        }
-
         public override void Flush()
         {
             _stream.Flush();

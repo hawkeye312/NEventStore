@@ -36,18 +36,18 @@ namespace NEventStore
 
         private static IEnumerable<Assembly> GetAllAssemblies()
         {
-            return Assembly.GetCallingAssembly()
+            return Assembly.GetEntryAssembly()
                            .GetReferencedAssemblies()
                            .Select(Assembly.Load)
-                           .Concat(new[] {Assembly.GetCallingAssembly()});
+                           .Concat(new[] {Assembly.GetEntryAssembly()});
         }
 
         private static IDictionary<Type, Func<object, object>> GetConverters(IEnumerable<Assembly> toScan)
         {
             IEnumerable<KeyValuePair<Type, Func<object, object>>> c = from a in toScan
                                                                       from t in a.GetTypes()
-                                                                      where !t.IsAbstract
-                                                                      let i = t.GetInterface(typeof (IUpconvertEvents<,>).FullName)
+                                                                      where !t.GetTypeInfo().IsAbstract
+                                                                      let i = t.GetInterfaces().Single(t => t.FullName == typeof (IUpconvertEvents<,>).FullName)
                                                                       where i != null
                                                                       let sourceType = i.GetGenericArguments().First()
                                                                       let convertMethod = i.GetMethods(BindingFlags.Public | BindingFlags.Instance).First()
@@ -73,7 +73,7 @@ namespace NEventStore
 
         public virtual EventUpconverterWireup WithConvertersFromAssemblyContaining(params Type[] converters)
         {
-            IEnumerable<Assembly> assemblies = converters.Select(c => c.Assembly).Distinct();
+            IEnumerable<Assembly> assemblies = converters.Select(c => c.GetTypeInfo().Assembly).Distinct();
             Logger.Debug(Messages.EventUpconvertersLoadedFrom, string.Concat(", ", assemblies));
             _assembliesToScan.AddRange(assemblies);
             return this;

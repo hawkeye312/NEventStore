@@ -1,8 +1,6 @@
 namespace NEventStore
 {
     using System;
-    using System.Transactions;
-    using NEventStore.Diagnostics;
     using NEventStore.Logging;
     using NEventStore.Persistence;
     using NEventStore.Serialization;
@@ -11,13 +9,13 @@ namespace NEventStore
     {
         private static readonly ILog Logger = LogFactory.BuildLogger(typeof (PersistenceWireup));
         private bool _initialize;
-        private bool _tracking;
+        //private bool _tracking;
         private string _trackingInstanceName;
 
         public PersistenceWireup(Wireup inner)
             : base(inner)
         {
-            Container.Register(TransactionScopeOption.Suppress);
+            //Container.Register(TransactionScopeOption.Suppress);
         }
 
         public virtual PersistenceWireup WithPersistence(IPersistStreams instance)
@@ -39,25 +37,25 @@ namespace NEventStore
             return this;
         }
 
-        public virtual PersistenceWireup TrackPerformanceInstance(string instanceName)
-        {
-            if (instanceName == null)
-            {
-                throw new ArgumentNullException("instanceName", Messages.InstanceCannotBeNull);
-            }
+        //public virtual PersistenceWireup TrackPerformanceInstance(string instanceName)
+        //{
+        //    if (instanceName == null)
+        //    {
+        //        throw new ArgumentNullException("instanceName", Messages.InstanceCannotBeNull);
+        //    }
 
-            Logger.Debug(Messages.ConfiguringEnginePerformanceTracking);
-            _tracking = true;
-            _trackingInstanceName = instanceName;
-            return this;
-        }
+        //    Logger.Debug(Messages.ConfiguringEnginePerformanceTracking);
+        //    _tracking = true;
+        //    _trackingInstanceName = instanceName;
+        //    return this;
+        //}
 
-        public virtual PersistenceWireup EnlistInAmbientTransaction()
-        {
-            Logger.Debug(Messages.ConfiguringEngineEnlistment);
-            Container.Register(TransactionScopeOption.Required);
-            return this;
-        }
+        //public virtual PersistenceWireup EnlistInAmbientTransaction()
+        //{
+        //    Logger.Debug(Messages.ConfiguringEngineEnlistment);
+        //    Container.Register(TransactionScopeOption.Required);
+        //    return this;
+        //}
 
         public override IStoreEvents Build()
         {
@@ -70,10 +68,10 @@ namespace NEventStore
                 engine.Initialize();
             }
 
-            if (_tracking)
-            {
-                Container.Register<IPersistStreams>(new PerformanceCounterPersistenceEngine(engine, _trackingInstanceName));
-            }
+            //if (_tracking)
+            //{
+            //    Container.Register<IPersistStreams>(new PerformanceCounterPersistenceEngine(engine, _trackingInstanceName));
+            //}
 
             return base.Build();
         }
