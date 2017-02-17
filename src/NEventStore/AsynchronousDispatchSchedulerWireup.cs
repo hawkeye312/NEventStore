@@ -1,6 +1,5 @@
 namespace NEventStore
 {
-    using System.Transactions;
     using NEventStore.Dispatcher;
     using NEventStore.Logging;
     using NEventStore.Persistence;
@@ -12,11 +11,11 @@ namespace NEventStore
         public AsynchronousDispatchSchedulerWireup(Wireup wireup, IDispatchCommits dispatcher, DispatcherSchedulerStartup startup)
             : base(wireup)
         {
-            var option = Container.Resolve<TransactionScopeOption>();
-            if (option != TransactionScopeOption.Suppress)
-            {
-                Logger.Warn(Messages.SynchronousDispatcherTwoPhaseCommits);
-            }
+            //var option = Container.Resolve<TransactionScopeOption>();
+            //if (option != TransactionScopeOption.Suppress)
+            //{
+            //    Logger.Warn(Messages.SynchronousDispatcherTwoPhaseCommits);
+            //}
 
             Logger.Debug(Messages.AsyncDispatchSchedulerRegistered);
             Startup(startup);

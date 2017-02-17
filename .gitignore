@@ -110,3 +110,6 @@ UpgradeLog*.XML
 publish-net40/
 nunit.TestResult.*
 /output
+
+restore.dg
+project.lock.json

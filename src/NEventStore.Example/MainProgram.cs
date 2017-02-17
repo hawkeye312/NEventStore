@@ -1,7 +1,6 @@
 namespace NEventStore.Example
 {
     using System;
-    using System.Transactions;
     using NEventStore;
     using NEventStore.Dispatcher;
 
@@ -16,14 +15,14 @@ namespace NEventStore.Example
 
 		private static void Main()
 		{
-			using (var scope = new TransactionScope())
+			//using (var scope = new TransactionScope())
 			using (store = WireupEventStore())
 			{
 				OpenOrCreateStream();
 				AppendToStream();
 				TakeSnapshot();
 				LoadFromSnapshotForwardAndAppend();
-				scope.Complete();
+				//scope.Complete();
 			}
 
 			Console.WriteLine(Resources.PressAnyKey);
@@ -36,7 +35,6 @@ namespace NEventStore.Example
 				.LogToOutputWindow()
 				.UsingInMemoryPersistence()
 					.InitializeStorageEngine()
-					.TrackPerformanceInstance("example")
 					.UsingJsonSerialization()
 						.Compress()
 						.EncryptWith(EncryptionKey)

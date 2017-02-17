@@ -28,7 +28,7 @@ namespace NEventStore.Serialization
         {
             Logger.Verbose(Messages.SerializingGraph, typeof (T));
 
-            using (var rijndael = new RijndaelManaged())
+            using (var rijndael = Aes.Create())
             {
                 rijndael.Key = _encryptionKey;
                 rijndael.Mode = CipherMode.CBC;
@@ -50,7 +50,7 @@ namespace NEventStore.Serialization
         {
             Logger.Verbose(Messages.DeserializingStream, typeof (T));
 
-            using (var rijndael = new RijndaelManaged())
+            using (var rijndael = Aes.Create())
             {
                 rijndael.Key = _encryptionKey;
                 rijndael.IV = GetInitVectorFromStream(input, rijndael.IV.Length);
